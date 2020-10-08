@@ -37,13 +37,15 @@ def notify():
     server.login(sendemail, password)
 
     # Send the mail
-    msg = "The following change has occured to host %s. %s" % (addr, event)
+    msg = "The following change has occured to host %s. %s \n %s." % (addr, event, timestamp)
     server.sendmail(sendemail, recemail, msg)
     server.quit()
 
 #Ping the host and determine if it is up or down
 def ping():
+    global timestamp
     timenow = datetime.datetime.now()
+    timestamp = timenow.strftime('%D %T')
     global upordown
     with open(os.devnull, 'w') as dnull:
         try:
