@@ -35,7 +35,7 @@ def notify():
     server.login(sendemail, password)
 
     # Send the mail
-    msg = "The following change has occured to host %s. %s. \n%s" % (addr, event, timestamp)
+    msg = "The following change has occured to host %s. %s. \n %s" % (addr, event, timestamp)
     server.sendmail(sendemail, recemail, msg)
     server.quit()
 
@@ -98,7 +98,7 @@ while True:
     #Reset the state value
     state = 0
 
-    time.sleep(.2)
+    time.sleep(2)
     print("\n---------\n")
 
 ### End ###
