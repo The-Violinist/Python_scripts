@@ -9,7 +9,6 @@
 import os
 import subprocess
 import time
-import datetime
 import smtplib
 
 
@@ -27,7 +26,6 @@ sendemail = input("Please enter your sender email address: ")
 password = input("Please enter your password: ")
 recemail = input("Please enter the receiver email address: ")
 
-
 ### Functions ###
 #Connect to server and send email
 def notify():
@@ -37,15 +35,15 @@ def notify():
     server.login(sendemail, password)
 
     # Send the mail
-    msg = "The following change has occured to host %s. %s \n %s." % (addr, event, timestamp)
+    msg = "The following change has occured to host %s. %s. \n%s" % (addr, event, timestamp)
     server.sendmail(sendemail, recemail, msg)
     server.quit()
 
 #Ping the host and determine if it is up or down
 def ping():
     global timestamp
-    timenow = datetime.datetime.now()
-    timestamp = timenow.strftime('%D %T')
+    t = time.localtime()
+    timestamp = time.asctime(t)
     global upordown
     with open(os.devnull, 'w') as dnull:
         try:
