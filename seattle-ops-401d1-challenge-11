@@ -34,8 +34,7 @@ def port_stat():
                 print("This port is open.")
             # If flags were Reset and ACK
             elif (flag == "RA"):
-                print("This port is closed.")
-                sr1(IP(dst=host)/TCP(sport=src_port,dport=dport_range,flags="F"),timeout=1,verbose=0)
+                print("This port is closed.")                
         else:
             print("The response was not of protocol type TCP.")
 
