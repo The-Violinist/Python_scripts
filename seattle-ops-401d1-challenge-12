@@ -1,0 +1,82 @@
+# Ops Challenge 12
+# David Armstrong
+# 10/20/2020
+# To determine the status of ports at a target
+
+### LIBRARIES ###
+from scapy.all import IP, sr1, TCP, ICMP
+import random
+import itertools
+import ipaddress
+
+### VARIABLES ###
+host_list = []
+host_count = 0
+
+### FUNCTIONS ###
+# Find port status of the target
+def port_stat():
+    # Define target host
+    host = input("Please enter an IP or web address:\n>")
+    # Ports to scan
+    dport_range = [20, 21, 22, 80, 443]
+    for dst_port in dport_range:
+        # Randomized source port
+        src_port = random.randint(1000, 10000)
+        print("Sending request to port", dst_port, "@", host, "from port", src_port)
+        # Sends a SYN request and receives a flag from the target
+        response = sr1(IP(dst=host)/TCP(sport=src_port,dport=dport_range,flags="S"),timeout=1,verbose=0)
+        # Determine if there is a response
+        if response is None:
+            print("This port is filtered.")
+        # Determine if the response as a TCP attribute
+        elif (response.haslayer(TCP)):
+            flag = (response.getlayer(TCP).flags)
+            # If flags were SYN and ACK
+            if (flag == "SA"):
+                sr1(IP(dst=host)/TCP(sport=src_port,dport=dport_range,flags="F"),timeout=1,verbose=0)
+                print("This port is open.")
+            # If flags were Reset and ACK
+            elif (flag == "RA"):
+                print("This port is closed.")
+        else:
+            print("The response was not of protocol type TCP.")
+# Iterate thru the hosts and find ones which are present
+def find_hosts():
+    network = input("Please enter a network to run an ICMP scan:\n>")
+    ip_list = ipaddress.ip_network(network)
+    # Leave off the network and broadcast addresses
+    for host in itertools.islice(ip_list , 1, 255):
+        response = sr1(
+            IP(dst=str(host))/ICMP(),
+            timeout=1,
+            verbose=0
+            )
+        # If there is a response, the host is up
+        if response is None:
+            print(host, "is down or unresponsive.")
+        elif response.haslayer(ICMP):
+            global host_count
+            host_count += 1
+            host_list.append(host)
+            if(int(response.getlayer(ICMP).type) == 0):
+                print(host, "is up.")
+            elif(
+                int(response.getlayer(ICMP).type) == 3 and
+                int(response.getlayer(ICMP).code) in [1,2,3,9,10,13]
+            ):
+                print(host, "is actively blocking ICMP traffic.")
+
+
+    print("There are a total of", host_count, "hosts which are up.")
+    inp = input("Would you like to see a list of the hosts which are up?\n>")
+    if (inp == "y" or inp == "yes"):
+        for addr in host_list:
+            print(addr)
+### MAIN ###
+scan_opt = input("Please select from the following options:\na\)Port status\nb\)Network host status\n>")
+if (scan_opt == "a"):
+    port_stat()
+elif (scan_opt == "b"):
+    find_hosts()
+### END ###
