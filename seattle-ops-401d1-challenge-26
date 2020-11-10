@@ -5,39 +5,22 @@
 # https://dotnettutorials.net/lesson/logging-module-in-python/
 
 import logging
-import os
-
+import subprocess
 
 logging.basicConfig(filename='challenge06.txt',level=logging.INFO)
 ###Variables###
-#Take user input to be used in the function
-#inp = input("Please enter a console command:\n>")
-inp = "asdf"
-###Functions###
-#Run a system command based on the input
-def sys(var1):
-    print(f"Here is the result of the following command: {var1}\n\n")
-    os.system(var1)
-    print("\n\n")
 
+#Variable to use for the subprocess
+inp = "ls"
 
 ###Main###
 #Call the function
-'''
+
 try:
-    sys(inp)
-    logging.info(f"{inp} worked")
-except Exception as err:
-    logging.warning(f"{inp} did not work")
-'''
-try:
-    os.system(inp)
-    logging.info(f"{inp} worked")
+	subprocess.run([inp], check = True)
+	print("That worked")
+	logging.info(f"{inp} worked")
 except:
-    logging.error(f"{inp} did not work")
-'''
-sys(inp)
-
-
-'''
+	print ('Command does not exist')
+	logging.error(f"{inp} did not work")
 ###End###
