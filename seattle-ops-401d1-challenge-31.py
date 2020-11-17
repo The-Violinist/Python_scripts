@@ -38,13 +38,22 @@ def take_path():
             return dir_path
 
 def find_file():
-    #Walk through all files and directories from the starting point
+    #Total files counter
+    global files_searched
+    files_searched = 0
+    #Total files found counter
+    global files_found
+    files_found = 0
     for (root, dirs, files) in os.walk(dir_path, topdown = False):
         for name in files:
             path = os.path.join(root, name)
+            files_searched += 1
             if (name == user_input):
                 print(f"{name} is present.\nIt is in the following location: {root}")
+                files_found += 1
 ###MAIN###
 take_path()
 find_file()
+print(f"Files searched = {files_searched}")
+print(f"Files found = {files_found}")
 ###END###
