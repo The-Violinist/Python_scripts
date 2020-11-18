@@ -63,6 +63,8 @@ def analyze_file():
             contents_hash = get_hash(path)
             contents_size = get_size(path)
             time_now = datetime.datetime.now()
+            #In order to print the path use: print(path)
+            #I decided to not include this in the finished product as it clutters the output
             file_info.append(tuple((name, str(time_now), contents_hash, f"{contents_size/1000000} MB")))
 
 #Take the file information and make it readable
