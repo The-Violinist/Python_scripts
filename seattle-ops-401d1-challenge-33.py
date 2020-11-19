@@ -1,21 +1,18 @@
 #Ops Challenge 33
 #David Armstrong
 #11-18-2020
-#Analyze files in a directory (and all subdirectories) for hash and size
+#Analyze files in a directory (and all subdirectories) for hash and size, then check hashes against virustotal
 
 ###LIBRARIES###
-import os
-import sys
-import platform
+import os, platform, hashlib, datetime
 import os.path
 from os import path
-import hashlib
-import datetime
 ###VARIABLES###
 #determine the operating system type. In this case, it is not necessary but helps with testing
 system = platform.system()
 #List of tuples which holds the file data
 file_info = [("File Name","Time Recorded","Hash Value","File Size")]
+hashes = []
 ###FUNCTIONS###
 #Request a directory path from the user
 def take_path():
@@ -58,14 +55,9 @@ def analyze_file():
     for (root, dirs, files) in os.walk(dir_path, topdown = False):
         for name in files:
             path = os.path.join(root, name)
-            contents_hash = get_hash(path)
-            old_stdout = sys.stdout
-            f = open(os.devnull, 'w')
-            sys.stdout = f
-            #tested_for_virus = test_hash(contents_hash)
-#            if (tested_for_virus == "KNOWN"):
-#                print(tested_for_virus)
             contents_size = get_size(path)
+            contents_hash = get_hash(path)
+            hashes.append(contents_hash)
             time_now = datetime.datetime.now()
             file_info.append(tuple((name, str(time_now), contents_hash, f"{contents_size/1000000} MB")))
 
@@ -83,9 +75,20 @@ def print_table():
     for file_name,search_time,hash_contents,file_size in file_info:
         print("{:<35.33}{:<30.30}{:<37.37}{}".format(file_name,search_time,hash_contents,file_size))
 
+def count_detections():
+    virus_count = 0
+    file_count = 0
+    for hash in hashes:
+        tested_for_virus = test_hash(hash)
+        if (tested_for_virus == f"{hash}: MALICIOUS"):
+            print(f"{hash} contains a virus.")
+            virus_count += 1
+        file_count += 1
+        print(f"{file_count} total files counted. There were {virus_count} files containing malware.")
 
 ###MAIN###
 take_path()
 analyze_file()
 print_table()
+count_detections()
 ###END###
