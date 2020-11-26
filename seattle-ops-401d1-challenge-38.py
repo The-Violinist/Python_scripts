@@ -44,34 +44,38 @@ def get_form_details(form):
     ##the returned details is an embeded array (dictionary (list (dictionaries))) which includes the action, method and then type of field and the corresponding name value.
     return details
 
-### TODO: Add function explanation here ###
-### In your own words, describe the purpose of this function as it relates to the overall objectives of the script ###
+##Sends the form 
 def submit_form(form_details, url, value):
+    #Puts an url together using the base url and joining components of that with the action result from form_details.
     target_url = urljoin(url, form_details["action"])
     inputs = form_details["inputs"]
+    ##Initializes a dictionary to store the field name and value pair.
     data = {}
     for input in inputs:
         if input["type"] == "text" or input["type"] == "search":
             input["value"] = value
+        ##Determine the names and values of the fields.
         input_name = input.get("name")
         input_value = input.get("value")
         if input_name and input_value:
             data[input_name] = input_value
-
+    ##Determines if the method is post and if so, returns the status code
     if form_details["method"] == "post":
+        ##Use the data dictionary as the data requirement
         return requests.post(target_url, data=data)
     else:
+        ##Use the data dictionary as the params requirement
         return requests.get(target_url, params=data)
 
-### TODO: Add function explanation here ###
-### In your own words, describe the purpose of this function as it relates to the overall objectives of the script ###
 def scan_xss(url):
     ##forms = a list of all tags titled "form"
     forms = get_all_forms(url)
     ##Determines how many items there are in the list and prints the number of forms on the page.
     print(f"[+] Detected {len(forms)} forms on {url}.")
     ##html/JavaScript to inject
-    js_script = "<iframe src='javascript:alert(`xss`)'>"
+    ##I tried about 20 different things here and was never able to get the desired result. I'm just not sure at this point where the problem lies.
+    ##I keep getting a Status 404 and I know this URL works.
+    js_script = "<script>alert('hello')<.script>"
     ##Set the default to vulnerability being false
     is_vulnerable = False
     ##Loop through each occurence of a form tag and 
@@ -95,7 +99,3 @@ def scan_xss(url):
 if __name__ == "__main__":
     url = input("Enter a URL to test for XSS:")
     print(scan_xss(url))
-
-### TODO: When you have finished annotating this script with your own comments, copy it to Web Security Dojo
-### TODO: Test this script against one XSS-positive target and one XSS-negative target
-### TODO: Paste the outputs here as comments in this script, clearling indicating which is positive detection and negative detection
