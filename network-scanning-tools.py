@@ -42,7 +42,7 @@ def portScanner():
     #hostip = input("Please enter an IP address")
     port_in = input("Please enter a port to scan:\n>")
     portno = int(port_in)
-    result = sockmod.connect_ex((hostip, portno)) # TODO: Replace "FUNCTION" with the appropriate socket.function call as found in the [socket docs](https://docs.python.org/3/library/socket.html)
+    result = sockmod.connect_ex((hostip, portno))
     if (result == 0):
         print("Port open")
     else:
