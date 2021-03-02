@@ -10,3 +10,6 @@ The libraries include:
 - BeautifulSoup
 - smtplib
 - socket
+- hashlib
+- pxssh
+- and others
