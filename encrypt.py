@@ -2,6 +2,7 @@
 # David Armstrong
 # 10-15-2020
 # Taking user input and encrypting folders recursively with addition of popups
+# !!!For demonstration purposes. Do not run!
 
 # Import Libraries
 from cryptography.fernet import Fernet
