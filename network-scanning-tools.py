@@ -85,6 +85,5 @@ def select_scan():
         except:
             pass
 ###MAIN###
-#banner_grab(hostip, portno)
 select_scan()
 ###END###
