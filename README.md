@@ -1,5 +1,5 @@
 # Python scripts
-##(plus 1 yara and 1 lua)
+## (plus 1 yara and 1 lua)
 
 This is a repository which I created during my final Cybersecurity course at Code Fellows. 
 
